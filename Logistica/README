@@ -1,0 +1,178 @@
+ 
+ 
+ Sistema de Logística - Ci&T
+ ---------------------------
+ 
+ Autor: Romilson Cruz de Carvalho
+ Data : 17/08/2015
+ 
+ Ferramentas
+ ----------------------
+ 
+ . Eclipse Kepler
+ . Apache Tomcat 7
+ . Maven 
+ 
+ 
+ 
+ Arquitetura de Camadas
+ ----------------------
+ 
+ O sistema está dividido em pacotes que formam as seguintes camadas:
+ 
+ 1) Modelo
+ ----------
+ Armazena os dados do sistema. Os dados são gravados em arquivo texto 
+ por conta da simplicidade e contexto didático. Os dados são gravados
+ em formato json.
+ 
+ 2) Negócio
+ ----------
+ Aqui estão as classes que contêm toda a lógica de busca de rotas,
+ regras de negócio, inteligência de pesquisa necessários à 
+ execução do sistema.
+ 
+ 3) Serviço
+ ----------
+ A camada de serviço disponibiliza webservice, o qual possui interface
+ para armazenamento de mapas e pesquisa de rotas econômicas.
+ 
+ 
+ Tecnologias adotadas
+ --------------------
+ 
+ 1) Modelo
+ ----------
+ Foi adotada a utilização da api NIO (java.nio) para leitura e 
+ persistência do arquivo de banco de dados. 
+ Esta tecnologia foi utilizada pela facilidade de gravação e leitura, 
+ além de simplicidade na manipulação de informações, 
+ dado o contexto didático do desafio.
+ 
+ 2) Negócio
+ ----------
+ A estratégia para resolução do desafio se baseou em algorítmos 
+ genéticos, com a utilização da framework JGAP (Java Genetic 
+ Algorithms Package).
+ 
+ Tal decisão tem como fundamento o fato a seguir: 
+ Pesquisas em grafos para cálculos diversos, como o de menor distância 
+ e custo, tem como característica a possibilidade de apresentar um grande
+ número de caminhos derivados, os quais devem ser verificados e comparados
+ com outros caminhos. Sendo assim, muitas vezes pode não haver tempo hábil
+ para encontrar a solução definitiva do problema (ou seja, encontrar 
+ a melhor solução). Então a adoção de algorítmo genético permite que se 
+ encontre a melhor solução dentre as soluções possíveis analisadas naquele
+ momento. 
+ Além disso, com uma melhoria no sistema, seria possível fazer com que 
+ após uma boa solução ser encontrada, a população (de soluções) possa ser 
+ guardada em banco de dados. Assim caso haja uma nova pesquisa, 
+ a população é evoluída a partir do último ponto, e uma solução ainda 
+ melhor pode ser encontrada no tempo máximo permitido para a pesquisa.
+ 
+ 3) Serviço
+ ----------
+ Foi adotada a utilização da api JAX-WS, framework Jersey, para 
+ desenvolvimento do webservice. Esta framework foi adotada por conta da 
+ boa aceitação de mercado.
+ 
+ O tipo de informação adotado para comunicação (inbound/outbound) 
+ foi JSON, dada sua característica natural de conteúdo reduzido.
+ 
+ O sistema também adotou a framework Gson para conversão entre objetos
+ java e conteúdo JSON.
+ 
+ 
+ Testes
+ -------------
+ 
+ Foi utilizada a ferramenta SOAP-UI, de forma que se pudesse testar o 
+ sistema como um todo. A adoção de teste unitário (JUnit por exemplo)
+ pode ser adotada para testar a camada de negócio e também automatizar
+ os testes. Porém por questões de prazo e pela intenção de realizar
+ um teste macro da aplicação, apenas o SOAP-UI foi adotado para
+ execução dos serviços e conferência dos resultados.
+ 
+ 
+ Execução da aplicação
+ ---------------------
+ 
+ 1. Através da ferramenta SOAPUI 5.2.0, abrir o arquivo 
+ soapui-project-test.xml
+ 
+ 2. Com duplo clique abrir o request do serviço ArmazenarMapa.
+ 
+ 3. Incluir o conteúdo JSON que descreve o mapa logístico e executar 
+ o serviço para que o mesmo seja gravado.
+ O mapa será gravado no arquivo %tomcat_home%/db_logistica/db.json.
+ Obs.: É necessário que o sistema tenha permissão de escrita no 
+ iretório do tomcat.
+ 
+ Exemplo de conteúdo:
+ 
+ 
+ 
+ 4. Duplo clique no request do serviço obterRotaMaisEconomica.
+ Informar o ponto de origem, destino, autonomia do veículo e custo
+ do combustível conforme exemplo, e executar o serviço.
+ 
+ O sistema realizará os cálculos e retornará o resultado.
+ 
+ 
+ Exemplos
+ ----------------------------
+ 
+ 1) Exemplo de conteúdo de Mapa em JSON
+ 
+ {
+   "nome":"MAPA1",
+   "trechos":[
+      {
+         "pontoOrigem":"B",
+         "pontoDestino":"E",
+         "distanciaKm":50.0
+      },
+      {
+         "pontoOrigem":"B",
+         "pontoDestino":"D",
+         "distanciaKm":15.0
+      },
+      {
+         "pontoOrigem":"A",
+         "pontoDestino":"C",
+         "distanciaKm":20.0
+      },
+      {
+         "pontoOrigem":"A",
+         "pontoDestino":"B",
+         "distanciaKm":10.0
+      },
+      {
+         "pontoOrigem":"C",
+         "pontoDestino":"D",
+         "distanciaKm":30.0
+      },
+      {
+         "pontoOrigem":"D",
+         "pontoDestino":"E",
+         "distanciaKm":30.0
+      }
+   ]
+}
+ 
+2) Exemplo de chamada do serviço de rota mais econômica
+
+http://localhost:8080/Logistica/ws/logistica/obterRotaMaisEconomica/{pontoOrigem}/{pontoDestino}/{autonomiaKmPorLitro}/{valorLitroCombustivel}
+
+http://localhost:8080/Logistica/ws/logistica/obterRotaMaisEconomica/A/E/10/2.5
+
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
