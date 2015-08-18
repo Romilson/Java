@@ -51,6 +51,15 @@ public class LogisticaBusiness {
 	}
 
 	/**
+	 * Remove um mapa pelo nome.
+	 * @param nome Nome do mapa.
+	 * @throws LogisticaException
+	 */
+	public void removerMapa(String nome) throws LogisticaException {
+		dao.removerMapaPeloNome(nome);
+	}
+	
+	/**
 	 * Com base nos parâmetros de entrada e nos mapas armazenados, verifica qual
 	 * a rota mais econômica.
 	 * 
@@ -82,7 +91,7 @@ public class LogisticaBusiness {
 			try {
 				al.inicializar(pontoOrigem, pontoDestino, autonomiaKmPorLitro,
 						valorLitroCombustivel);
-				RotaEconomicaDto rotaDto = al.executar(90 * 1000, 1000);
+				RotaEconomicaDto rotaDto = al.executar(90 * 1000, 300);
 
 				if (rotaDto == null) {
 					continue; // solucao nao encontrada.

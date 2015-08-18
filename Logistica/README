@@ -25,11 +25,23 @@
  por conta da simplicidade e contexto didático. Os dados são gravados
  em formato json.
  
+ Obs.: Em ambiente real, seria adequado a adoção da api especializada,
+ como por exemplo JPA ou Ibatis.
+ 
+ 
  2) Negócio
  ----------
  Aqui estão as classes que contêm toda a lógica de busca de rotas,
  regras de negócio, inteligência de pesquisa necessários à 
  execução do sistema.
+
+ Obs.: Em ambiente real, seria adequado a adoção de solução que ofereça
+ suporte transacional, como por exemplo classes de serviço Spring + JTA ou 
+ EJB Stateless + JTA. 
+ Caso houvesse a necessidade de otimizar a busca pela melhor rota através
+ de paralelismo, a arquitetura poderia contar ainda com JMS 
+ (Java Message Service).
+ 
  
  3) Serviço
  ----------
@@ -47,6 +59,7 @@
  Esta tecnologia foi utilizada pela facilidade de gravação e leitura, 
  além de simplicidade na manipulação de informações, 
  dado o contexto didático do desafio.
+  
  
  2) Negócio
  ----------
@@ -86,32 +99,30 @@
  -------------
  
  Foi utilizada a ferramenta SOAP-UI, de forma que se pudesse testar o 
- sistema como um todo. A adoção de teste unitário (JUnit por exemplo)
- pode ser adotada para testar a camada de negócio e também automatizar
- os testes. Porém por questões de prazo e pela intenção de realizar
- um teste macro da aplicação, apenas o SOAP-UI foi adotado para
- execução dos serviços e conferência dos resultados.
+ sistema como um todo, através da execução dos serviços e conferência 
+ dos resultados.
+ 
+ Foi desenvolvida uma classe de teste unitário em JUnit para testar as 
+ principais funcionalidades da camada de negócio.
  
  
  Execução da aplicação
  ---------------------
  
- 1. Através da ferramenta SOAPUI 5.2.0, abrir o arquivo 
+ 1. Fazer deploy da aplicação (.war) em servidor Tomcat 7.
+ 
+ 2. Através da ferramenta SOAPUI 5.2.0, abrir o arquivo 
  soapui-project-test.xml
  
- 2. Com duplo clique abrir o request do serviço ArmazenarMapa.
+ 3. Com duplo clique abrir o request do serviço ArmazenarMapa.
  
- 3. Incluir o conteúdo JSON que descreve o mapa logístico e executar 
+ 4. Incluir o conteúdo JSON que descreve o mapa logístico e executar 
  o serviço para que o mesmo seja gravado.
  O mapa será gravado no arquivo %tomcat_home%/db_logistica/db.json.
  Obs.: É necessário que o sistema tenha permissão de escrita no 
- iretório do tomcat.
- 
- Exemplo de conteúdo:
- 
- 
- 
- 4. Duplo clique no request do serviço obterRotaMaisEconomica.
+ diretório do tomcat.
+  
+ 5. Duplo clique no request do serviço obterRotaMaisEconomica.
  Informar o ponto de origem, destino, autonomia do veículo e custo
  do combustível conforme exemplo, e executar o serviço.
  
